@@ -1,0 +1,23 @@
+{
+  "name": "sms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.2",
+    "entities": "^1.1.2",
+    "express": "^4.16.4",
+    "lodash": "^4.17.11",
+    "mojtelekomsms": "^1.0.0",
+    "moment": "^2.22.2",
+    "node-html-parser": "^1.1.10",
+    "request": "^2.88.0"
+  }
+}
