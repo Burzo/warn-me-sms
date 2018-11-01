@@ -4,3 +4,6 @@ npm-debug.log
 .env
 .DS_Store
 starakoda.js
+config/config.json
+logs/*
+logs
