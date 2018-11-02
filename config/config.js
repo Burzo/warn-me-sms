@@ -1,6 +1,6 @@
 try {
     var config = require("./config.json")   
-} catch (error) {
+} catch (e) {
     throw new Error("Missing config.json, can not login into Moj Telekom. File should be in the folder config.")
 }
 

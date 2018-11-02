@@ -27,15 +27,17 @@ const send = async (user, obj={}) => {
 
     let shiftEndFullTime = (moment(`${shiftEnd}-0-0`, "H-m-s")).subtract(15, "minutes")
     let remainder = moment.utc(shiftEndFullTime.diff(moment())).format("H:m")
+
     remainder = (moment.duration(remainder).asHours()).toFixed(1)
-    console.log(process.env.PATHTOLOGS+"/send-sms-logs.txt")
     
     let text = `*DEF ${remainder}# Oddaj porocilo.`
-    let log = `Sms z vsebino ${text} poslan ${user}. Predvidoma bi moral prispeti ob ${shiftEndFullTime.format("H:m")}h\n`
+    let log = `${moment().format("D.M - H:m:s")}: Sms z vsebino ${text} poslan ${user}. Predvidoma bi moral prispeti ob ${shiftEndFullTime.format("H:m")}h\n`
 
-    sendSms(numbersAll[user], text, process.env.MTUSERNAME, process.env.MTPASSWORD, process.env.MTNUMBER).catch(e => console.log(e+" Preverite vpisne podatke."))
+    sendSms(numbersAll[user], text, process.env.MTUSERNAME, process.env.MTPASSWORD, process.env.MTNUMBER).catch(e => fs.appendFile(process.env.PATHTOLOGS+"/send-sms-logs.txt", `${moment().format("D.M - H:m:s")}: ${e}}. Preverite vpisne podatke.\n`))
 
     fs.appendFile(process.env.PATHTOLOGS+"/send-sms-logs.txt", log).catch(e => console.log(e))
     return log
 }
 
+
+module.exports = send

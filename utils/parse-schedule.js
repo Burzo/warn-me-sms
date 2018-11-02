@@ -1,15 +1,15 @@
 const moment = require("moment")
 var entities = require("entities");
 const {myEE} = require("../events")
+const fs = require("fs").promises
 
 const cheerio = require("cheerio")
 let $;
-let baza;
 
 const {getUrnikHTML} = require("./get-urnik")
 
 // Load HTML into Cheerio
-let bazaFun = () => {
+let bazaFun = (localFile=false, data={}) => {
     return new Promise((resolve,reject) => {
         getUrnikHTML()
         .then(res => {
@@ -79,10 +79,14 @@ let bazaFun = () => {
                     skupno[trenutnaOseba].push(final[i])
                 }
             }
-            myEE.emit("onUrnikLoad", skupno)
+            //myEE.emit("onUrnikLoad", skupno)
+            fs.appendFile(process.env.PATHTOLOGS+"/parse-schedule-logs.txt", `${moment().format("D.M - H:m:s")}: Parsing schedule successful\n`).catch(e => console.log(e))
             resolve(skupno)
         })
-        .catch(e => reject(e))
+        .catch(e => {
+            fs.appendFile(process.env.PATHTOLOGS+"/parse-schedule-logs.txt", `${moment().format("D.M - H:m:s")}: ${e}\n`).catch(e => console.log(e))
+            reject(e)
+        })
     })   
 }
 

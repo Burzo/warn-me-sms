@@ -3,7 +3,13 @@ const {request} = require("./request-promise")
 
 
 // Get urnik HTML
-const getNumbersHTML = async () => {
+const getNumbersHTML = async (localFile=false, data={}) => {
+
+
+// If local file, use local file
+if (localFile) {
+    return data
+}
 
 // Starting options
     var options = {

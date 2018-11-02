@@ -1,6 +1,7 @@
 const moment = require("moment")
 var entities = require("entities");
 const {myEE} = require("../events")
+const fs = require("fs").promises
 
 const cheerio = require("cheerio")
 let $;
@@ -8,7 +9,7 @@ let $;
 const {getNumbersHTML} = require("./get-numbers")
 
 // Load HTML into Cheerio
-let numbersFun = () => {
+let numbersFun = (localFile=false, data={}) => {
     return new Promise((resolve,reject) => {
         getNumbersHTML()
         .then(res => {
@@ -34,15 +35,19 @@ let numbersFun = () => {
                 $(zacasno).each(function(i, ele) {
                     let text = $(this).html()
                     if (isNaN(text)) {
-                        text = entities.decodeHTML(text).replace(/<br>/g, " ").split(" ").map((e) => e.toLowerCase())
+                        text = entities.decodeHTML(text).replace(/<br>/g, " ").replace(/<b>.*<\/b>/g, "").split(" ").map((e) => e.toLowerCase())
                         numbers[text] = $(zacasno[i+1]).text()
                     }
                 })
             });
-            myEE.emit("onNumbersLoad", numbers)
+            //myEE.emit("onNumbersLoad", numbers)
+            fs.appendFile(process.env.PATHTOLOGS+"/parse-numbers-log.txt", `${moment().format("D.M - H:m:s")}: Parsing numbers successful\n`).catch(e => console.log(e))
             resolve(numbers)
         })
-        .catch(e => reject(e))
+        .catch(e => {
+            fs.appendFile(process.env.PATHTOLOGS+"/parse-numbers-log.txt", `${moment().format("D.M - H:m:s")}: ${e}\n`).catch(e => console.log(e))
+            reject(e)
+        })
     })   
 }
 
