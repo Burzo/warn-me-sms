@@ -38,7 +38,7 @@ const send = async (user, obj={}) => {
 
     remainder = (moment.duration(remainder).asHours()).toFixed(1)
     //*DEF ${remainder}# Oddaj porocilo.
-    let text = `gnoj drek`
+    let text = `*DEF ${remainder}# Oddaj porocilo.`
     let log = `${moment().format("D.M - H:m:s")}: Sms z vsebino ${text} poslan ${user}. Pride ob ${shiftEndFullTime.format("H:m")}h\n`
 
     await sendSms(numbersAll[user], text, process.env.MTUSERNAME, process.env.MTPASSWORD, process.env.MTNUMBER).catch(e => {
