@@ -4,6 +4,7 @@ require("./config/config.js")
 const express = require("express")
 const fs = require("fs").promises
 var cron = require('node-cron');
+const async2 = require("async")
 const moment = require("moment")
 const {sendSms} = require("mojtelekomsms")
 
@@ -11,6 +12,8 @@ const baza = require("./utils/parse-schedule.js")
 const numbers = require("./utils/parse-numbers.js")
 const {myEE} = require("./events")
 const send = require("./src/send-sms.js")
+const asyncForEach = require("./utils/helpers.js")
+const sendToMore = require("./src/send-to-more.js")
 
 const app = express()
 
@@ -18,30 +21,13 @@ const app = express()
 // myEE.on("onUrnikLoad", (res) =>  console.log())
 // myEE.on("onNumbersLoad", (res) =>  console.log())
 
-
-cron.schedule(" 0 5 * * * ", async () => {
-    fs.stat(__dirname+"/data/baza.json").then(res => {
-        var currentDay = moment(res.mtime).format("D")
-    })
-    await send("drofenik,miha").then(res => console.log()).catch(e => {
-        fs.appendFile(process.env.PATHTOLOGS+"/send-sms-logs.txt", `${moment().format("D.M - H:m:s")}: ${e}}\n`)
-    })
+cron.schedule(" 0 5 * * * ", () => {
+    sendToMore()
     },  {
         scheduled: true,
         timezone: "Europe/Ljubljana"
-    })
-
-cron.schedule(" 0 5 * * * ", async () => {
-    fs.stat(__dirname+"/data/baza.json").then(res => {
-        var currentDay = moment(res.mtime).format("D")
-    })
-    await send("lekovac,vid").then(res => console.log()).catch(e => {
-        fs.appendFile(process.env.PATHTOLOGS+"/send-sms-logs.txt", `${moment().format("D.M - H:m:s")}: ${e}}\n`)
-    })
-    },  {
-        scheduled: true,
-        timezone: "Europe/Ljubljana"
-    })
+    }
+)
 
 // Update schedule and numbers every day in a file, at 0 minutes and 4 hours (04:00am)
 cron.schedule("0 4 * * *", async () => {
@@ -54,15 +40,6 @@ cron.schedule("0 4 * * *", async () => {
     scheduled: true,
     timezone: "Europe/Ljubljana"
 })
-
-
-
-
-
-
-
-
-
 
 
 app.listen(process.env.PORT, ()=> {
