@@ -1,3 +1,6 @@
+const fs = require("fs")
+const path = require("path")
+
 try {
     var config = require("./config.json")   
 } catch (e) {
@@ -8,4 +11,10 @@ process.env.MTUSERNAME = config.MTUSERNAME
 process.env.MTPASSWORD = config.MTPASSWORD
 process.env.MTNUMBER = config.MTNUMBER
 process.env.PORT = config.PORT
-process.env.PATHTOLOGS = require("path").join(__dirname, "../logs")
+
+//Check if logs folder exists
+if (!fs.existsSync(path.join(__dirname, "../logs"))) {
+    fs.mkdirSync(path.join(__dirname, "../logs"))
+}
+
+process.env.PATHTOLOGS = path.join(__dirname, "../logs")
