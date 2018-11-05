@@ -38,7 +38,18 @@ app.get("/test", (req, res) => {
 
 
 
-cron.schedule(" 0 5 * * * ", () => {
+
+
+
+
+
+
+
+// CRON bellow ------------------------------------------------------------------------------------------------------------------------------------------
+
+// Send text to users in users.json
+
+cron.schedule(" 30 5 * * * ", () => {
     sendToMore()
     },  {
         scheduled: true,
@@ -47,6 +58,7 @@ cron.schedule(" 0 5 * * * ", () => {
 )
 
 // Update schedule and numbers every day in a file, at 0 minutes and 4 hours (04:00am)
+
 cron.schedule("0 4 * * *", async () => {
     let num = await numbers()
     let baz = await baza()
@@ -57,12 +69,6 @@ cron.schedule("0 4 * * *", async () => {
     scheduled: true,
     timezone: "Europe/Ljubljana"
 })
-
-
-// app.listen(process.env.PORT, ()=> {
-//     fs.appendFile(process.env.PATHTOLOGS+"/server-logs.txt", `${moment().format("D.M - H:m:s")}: LISTENING ON PORT ${process.env.PORT}\n`)
-//     console.log(`${moment().format("D.M - H:m:s")}: LISTENING ON PORT ${process.env.PORT}`)
-// })
 
 https.createServer({
     key: fs2.readFileSync("./config/crt/privateKey.key"),

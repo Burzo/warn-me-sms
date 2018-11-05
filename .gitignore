@@ -6,5 +6,4 @@ npm-debug.log
 starakoda.js
 config/config.json
 logs/*
-logs
-data
+data/*
