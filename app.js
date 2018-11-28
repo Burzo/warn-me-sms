@@ -36,20 +36,11 @@ app.get("/test", (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
 // CRON bellow ------------------------------------------------------------------------------------------------------------------------------------------
 
 // Send text to users in users.json
 
-cron.schedule(" 30 5 * * * ", () => {
+cron.schedule(" 30 7 * * * ", () => {
     sendToMore()
     },  {
         scheduled: true,

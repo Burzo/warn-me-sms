@@ -7,3 +7,4 @@ starakoda.js
 config/config.json
 logs/*
 data/*
+test.js
